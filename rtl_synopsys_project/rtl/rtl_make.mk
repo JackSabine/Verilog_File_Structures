@@ -1,2 +1,2 @@
 SRC_FILES_RTL = \
-	$(RTLDIR)/*.v
+	$(RTLDIR)/arbiter.v

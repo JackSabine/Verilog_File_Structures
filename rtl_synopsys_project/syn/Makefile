@@ -42,7 +42,10 @@ init: clean
 	add synopsys2019;
 
 read:
-	design_vision -no_gui -x "read_verilog $(SRC_FILES_RTL)";
+	design_vision -no_gui -x "read_verilog $(SRC_FILES_RTL);";
+
+compile: read
+	design_vision -no_gui -x "haha";
 
 .PHONY: clean
 
