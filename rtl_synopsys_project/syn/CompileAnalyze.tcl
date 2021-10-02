@@ -20,9 +20,8 @@
 set modname     $env(TOP_NAME)
 set clkname     $env(CLK_NAME)
 set type        $env(TYPE)
-set timing_dir  $env(TIMING_DIR)
+set output_dir  $env(OUTPUT_DIR)
 set work_dir    $env(WORK_DIR)
-set details_dir $env(DETAILS_DIR)
 
 ###########################
 # old command - still works, is probably faster but less optimal
@@ -46,7 +45,7 @@ compile_ultra
 # tricks that Synopsys can do                          
 #---------------------------------------------------------
 
- report_timing  > ${timing_dir}/timing_max_slow_${type}.rpt
+ report_timing  > ${output_dir}/timing_max_slow_${type}.rpt
 
 #---------------------------------------------------------
 # This is your section to do different things to       
@@ -86,7 +85,7 @@ compile_ultra
 # is actually met.                                     
 #---------------------------------------------------------
 # report_timing  > timing_max_fast_${type}.rpt
- report_timing -delay min  > ${timing_dir}/timing_min_fast_holdcheck_${type}.rpt
+ report_timing -delay min  > ${output_dir}/timing_min_fast_holdcheck_${type}.rpt
 
 #---------------------------------------------------------
 # Write out the 'fastest' (minimum) timing file        
@@ -109,7 +108,7 @@ compile_ultra
  set link_library   NangateOpenCellLibrary_PDKv1_2_v2008_10_slow_nldm.db
  set link_library   [concat  $link_library dw_foundation.sldb]
  translate
- report_timing  > ${timing_dir}/timing_max_slow_holdfixed_${type}.rpt
+ report_timing  > ${output_dir}/timing_max_slow_holdfixed_${type}.rpt
 # report_timing -delay min  > timing_min_slow_holdfixed_${type}.rpt
 
 #---------------------------------------------------------
@@ -134,8 +133,8 @@ compile_ultra
 #---------------------------------------------------------
 # Write out area distribution for the final design    
 #---------------------------------------------------------
-report_cell > ${details_dir}/cell_report_final_${type}.rpt
-report_area > ${details_dir}/area_report_final_${type}.rpt
+report_cell > ${output_dir}/cell_report_final_${type}.rpt
+report_area > ${output_dir}/area_report_final_${type}.rpt
 
 #---------------------------------------------------------
 # Write out the resulting netlist in Verliog format    

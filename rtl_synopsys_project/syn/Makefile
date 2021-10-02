@@ -16,9 +16,8 @@ BASE 				:= $(shell cd ../ ; pwd )
 SYNDIR 				:= $(BASE)/syn
 RTLDIR 				:= $(BASE)/rtl
 
-export TIMING_DIR	:= $(SYNDIR)/timing
+export OUTPUT_DIR	:= $(SYNDIR)/output
 export WORK_DIR		:= $(SYNDIR)/work
-export DETAILS_DIR	:= $(SYNDIR)/details
 
 export CLK_NAME		:= clock
 export CLK_PER		:= 2
@@ -33,8 +32,7 @@ export SRC_FILES_RTL
 # Targets for make
 init: clean
 	@[ -d $(WORK_DIR) ] || mkdir $(WORK_DIR); \
-	[ -d $(TIMING_DIR) ] || mkdir $(TIMING_DIR); \
-	[ -d $(DETAILS_DIR) ] || mkdir $(DETAILS_DIR); \
+	[ -d $(OUTPUT_DIR) ] || mkdir $(OUTPUT_DIR); \
 	add synopsys2019;
 
 read:
@@ -51,17 +49,10 @@ clean:
 	fi
 
 superclean: clean
-	@if [ -d "$(TIMING_DIR)" ]; then \
-		rm -r $(TIMING_DIR); \
-	fi
-
-	@if [ -d "$(DETAILS_DIR)" ]; then \
-		rm -r $(DETAILS_DIR); \
+	@if [ -d "$(OUTPUT_DIR)" ]; then \
+		rm -r $(OUTPUT_DIR); \
 	fi
 
 	@if [ -d "$(SYNDIR)/alib-52" ]; then \
 		rm -r $(SYNDIR)/alib-52; \
 	fi
-	test -f $(SYNDIR)/command.log && rm $(SYNDIR)/command.log;
-	test -f $(SYNDIR)/default.svf && rm $(SYNDIR)/default.svf;
-	test -f $(SYNDIR)/fixed_names_init && rm $(SYNDIR)/fixed_names_init;
