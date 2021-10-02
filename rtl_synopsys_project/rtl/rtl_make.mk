@@ -1,0 +1,2 @@
+SRC_FILES_RTL = \
+	$(RTLDIR).*v

@@ -15,42 +15,30 @@
 #	|	+---Makefile (this file!!!)
 #
 
-BASE 		:= $(shell cd ../ ; pwd )
-SYNDIR 		:= $(BASE)/syn
-RTLDIR 		:= $(BASE)/rtl
+BASE 				:= $(shell cd ../ ; pwd )
+SYNDIR 				:= $(BASE)/syn
+RTLDIR 				:= $(BASE)/rtl
 
-TIMINGDIR	:= $(SYNDIR)/timing
+export TIMING_DIR	:= $(SYNDIR)/timing
+export WORK_DIR		:= $(SYNDIR)/work
+export DETAILS_DIR	:= $(SYNDIR)/details
+
 
 
 
 # Include rtl files
 include $(BASE)/rtl/rtl_make.mk	
-
-# This is the name of the testbench ModelSim will run (should be found in one of the included TB_FILES)
-TB_NAME := your_tb_modulename_here
-
+export SRC_FILES_RTL
 
 # # Targets for make
 init: clean
-
+	@[ -d $(WORK_DIR) ] || mkdir $(WORK_DIR); \
+	add synopsys2019; \
+	design_vision;
 
 .PHONY: clean
 
-clean
-
-# compileall:	clean
-# 	mkdir $(SIMDIR)/temp; vlib $(SIMDIR)/temp/workingDir; vmap work $(SIMDIR)/temp/workingDir; touch $(DOFILE);
-# 	vlog $(DEPS) $(RTL_FILES) $(TB_FILES);
-	
-# clean:
-# 	if [ -d "$(SIMDIR)/temp" ]; then \
-#         rm -r $(SIMDIR)/temp; \
-# 	fi
-
-# sim:		compileall
-# 	echo "run -all" >> $(DOFILE); vsim -do $(DOFILE) -c $(TB_NAME);
-
-# sim_g: 		compileall
-# 	echo "log -r /*" >> $(DOFILE); echo "onfinish stop" >> $(DOFILE); echo "do wave.do" >> $(DOFILE); vsim $(TB_NAME) -do $(DOFILE) -gui;
-
-# ```write format wave wave.do``` in ModelSim to save current wave configuration
+clean:
+	@if [ -d "$(WORK_DIR)/__pycache__" ]; then \
+		rm -r $(WORK_DIR)/__pycache__; \
+	fi
