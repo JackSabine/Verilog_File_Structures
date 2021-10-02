@@ -6,8 +6,8 @@
 #	|	|	+---verilog_modules.v
 #	|	|	+---...
 #	|	+---syn/
-#	|	|	+---Constraints.tcl
-#	|	|	+---CompileAnalyze.tcl
+#	|	|	+---Constraints_OneTime.tcl
+#	|	|	+---CompileAnalyze_OneTime.tcl
 #	|	|	+---.synopsys_dc.setup
 #	|	|	+---Makefile (this file!!!)
 #
@@ -38,10 +38,17 @@ init: clean
 read:
 	design_vision -no_gui -x "read_verilog $(SRC_FILES_RTL); exit;";
 
-compile:
-	design_vision -no_gui -x "read_verilog $(SRC_FILES_RTL); source Constraints.tcl; source CompileAnalyze.tcl; exit;";
+once:
+	design_vision -no_gui -x "read_verilog $(SRC_FILES_RTL); source Constraints_OneTime.tcl; source CompileAnalyze_OneTime.tcl; exit;";
+
+incc:
+	design_vision -no_gui -x "read_verilog $(SRC_FILES_RTL); source Constraints_OneTime.tcl; source CompileAnalyze_OneTime.tcl;"
+
+incg:
+	design_vision -gui -x "read_verilog $(SRC_FILES_RTL); source Constraints_OneTime.tcl; source CompileAnalyze_OneTime.tcl;"
 
 .PHONY: clean
+.PHONY: superclean
 
 clean:
 	@if [ -d "$(WORK_DIR)" ]; then \
