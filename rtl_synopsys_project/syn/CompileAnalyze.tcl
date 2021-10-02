@@ -134,8 +134,8 @@ compile_ultra
 #---------------------------------------------------------
 # Write out area distribution for the final design    
 #---------------------------------------------------------
-report_cell > ${details_dir}/cell_report_final.rpt
-report_area > ${details_dir}/area_report_final.rpt
+report_cell > ${details_dir}/cell_report_final_${type}.rpt
+report_area > ${details_dir}/area_report_final_${type}.rpt
 
 #---------------------------------------------------------
 # Write out the resulting netlist in Verliog format    

@@ -6,13 +6,10 @@
 #	|	|	+---verilog_modules.v
 #	|	|	+---...
 #	|	+---syn/
-#	|	|	+---read.tcl
-#	|	|	+---setup.tcl
 #	|	|	+---Constraints.tcl
-#	|	|	+---CompileAnalyze_Init.tcl
 #	|	|	+---CompileAnalyze.tcl
 #	|	|	+---.synopsys_dc.setup
-#	|	+---Makefile (this file!!!)
+#	|	|	+---Makefile (this file!!!)
 #
 
 BASE 				:= $(shell cd ../ ; pwd )
@@ -24,9 +21,9 @@ export WORK_DIR		:= $(SYNDIR)/work
 export DETAILS_DIR	:= $(SYNDIR)/details
 
 export CLK_NAME		:= clock
-export CLK_PER		:= 10
+export CLK_PER		:= 2
 export TOP_NAME		:= arbiter
-export TYPE			:= clock100
+export TYPE		:= clock500
 export report_default_significant_digits := 4
 
 # Include rtl files
@@ -52,6 +49,7 @@ clean:
 	@if [ -d "$(WORK_DIR)" ]; then \
 		rm -r $(WORK_DIR); \
 	fi
+	@rm -rf $(SYNDIR)/alib-52; rm $(SYNDIR)/command.log; rm $(SYNDIR)/default.svf; rm $(SYNDIR)/fixed_names_init;
 
 superclean: clean
 	@if [ -d "$(TIMING_DIR)" ]; then \
