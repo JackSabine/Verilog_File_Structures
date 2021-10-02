@@ -23,10 +23,10 @@ export TIMING_DIR	:= $(SYNDIR)/timing
 export WORK_DIR		:= $(SYNDIR)/work
 export DETAILS_DIR	:= $(SYNDIR)/details
 
-export CLK_NAME		:=clock
-export CLK_PER		:=10
-export TOP_NAME		:=arbiter
-export TYPE			:=clock100
+export CLK_NAME		:= clock
+export CLK_PER		:= 10
+export TOP_NAME		:= arbiter
+export TYPE			:= clock100
 export report_default_significant_digits := 4
 
 
@@ -38,7 +38,7 @@ export SRC_FILES_RTL
 
 # Targets for make
 init: clean
-	[ -d $(WORK_DIR) ] || mkdir $(WORK_DIR); \
+	@[ -d $(WORK_DIR) ] || mkdir $(WORK_DIR); \
 	[ -d $(TIMING_DIR) ] || mkdir $(TIMING_DIR); \
 	[ -d $(DETAILS_DIR) ] || mkdir $(DETAILS_DIR); \
 	add synopsys2019;

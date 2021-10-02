@@ -25,6 +25,7 @@ set type        $env(TYPE)
 set timing_dir  $env(TIMING_DIR)
 set work_dir    $env(WORK_DIR)
 set details_dir $env(DETAILS_DIR)
+set CLK_PER     $env(CLK_PER)
 
  current_design $modname
 
