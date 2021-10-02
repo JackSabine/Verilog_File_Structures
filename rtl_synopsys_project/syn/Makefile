@@ -41,7 +41,8 @@ init: clean
 	add synopsys2019;
 
 compile:
-	design_vision -shell dc_shell -no_gui;
+    design_vision -no_gui -x "source setup_read.tcl";
+
 
 
 .PHONY: clean
@@ -51,7 +52,7 @@ clean:
 		rm -r $(WORK_DIR); \
 	fi
 
-reset: clean
+superclean: clean
 	@if [ -d "$(TIMING_DIR)" ]; then \
 		rm -r $(TIMING_DIR); \
 	fi
