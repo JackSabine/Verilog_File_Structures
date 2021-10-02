@@ -49,12 +49,6 @@ clean:
 	@if [ -d "$(WORK_DIR)" ]; then \
 		rm -r $(WORK_DIR); \
 	fi
-	@if [ -d "$(SYNDIR)/alib-52" ]; then \
-		rm -r $(SYNDIR)/alib-52; \
-	fi
-	@[ -f $(SYNDIR)/command.log ] 		&& rm $(SYNDIR)/command.log; \
-	[ -f $(SYNDIR)/default.svf ] 		&& rm $(SYNDIR)/default.svf;  \
-	[ -f $(SYNDIR)/fixed_names_init ] 	&& rm $(SYNDIR)/fixed_names_init;
 
 superclean: clean
 	@if [ -d "$(TIMING_DIR)" ]; then \
@@ -64,3 +58,10 @@ superclean: clean
 	@if [ -d "$(DETAILS_DIR)" ]; then \
 		rm -r $(DETAILS_DIR); \
 	fi
+
+	@if [ -d "$(SYNDIR)/alib-52" ]; then \
+		rm -r $(SYNDIR)/alib-52; \
+	fi
+	@[ -f $(SYNDIR)/command.log ] 		&& rm $(SYNDIR)/command.log; \
+	[ -f $(SYNDIR)/default.svf ] 		&& rm $(SYNDIR)/default.svf;  \
+	[ -f $(SYNDIR)/fixed_names_init ] 	&& rm $(SYNDIR)/fixed_names_init;
