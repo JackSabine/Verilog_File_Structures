@@ -1,4 +1,4 @@
-if { $argc != 2 }
+if { $argc != 2 } {
     puts "Need two args"
 } else {
     set CLK_PER = [lindex $argv 1]

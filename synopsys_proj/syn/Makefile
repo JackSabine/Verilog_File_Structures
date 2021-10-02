@@ -35,16 +35,16 @@ init: clean
 	[ -d $(OUTPUT_DIR) ] || mkdir $(OUTPUT_DIR); \
 	add synopsys2019;
 
-read:
+read: init
 	design_vision -no_gui -x "read_verilog $(SRC_FILES_RTL); exit;";
 
-once:
+once: init
 	design_vision -no_gui -x "read_verilog $(SRC_FILES_RTL); source Constraints_OneTime.tcl; source CompileAnalyze_OneTime.tcl; exit;";
 
-incc:
+incc: init
 	design_vision -no_gui -x "read_verilog $(SRC_FILES_RTL); source Constraints_OneTime.tcl; source CompileAnalyze_OneTime.tcl;"
 
-incg:
+incg: init
 	design_vision -gui -x "read_verilog $(SRC_FILES_RTL); source Constraints_OneTime.tcl; source CompileAnalyze_OneTime.tcl;"
 
 .PHONY: clean
