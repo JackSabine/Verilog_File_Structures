@@ -62,6 +62,6 @@ superclean: clean
 	@if [ -d "$(SYNDIR)/alib-52" ]; then \
 		rm -r $(SYNDIR)/alib-52; \
 	fi
-	@[ -f $(SYNDIR)/command.log ] 		&& rm $(SYNDIR)/command.log; \
-	[ -f $(SYNDIR)/default.svf ] 		&& rm $(SYNDIR)/default.svf;  \
-	[ -f $(SYNDIR)/fixed_names_init ] 	&& rm $(SYNDIR)/fixed_names_init;
+	test -f $(SYNDIR)/command.log && rm $(SYNDIR)/command.log;
+	test -f $(SYNDIR)/default.svf && rm $(SYNDIR)/default.svf;
+	test -f $(SYNDIR)/fixed_names_init && rm $(SYNDIR)/fixed_names_init;
