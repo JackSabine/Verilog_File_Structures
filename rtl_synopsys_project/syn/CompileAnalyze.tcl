@@ -94,7 +94,7 @@ compile -map_effort medium
 # later verification.                                  
 #---------------------------------------------------------
 
- write_sdf ${modname}_min.sdf
+ write_sdf ${work_dir}/${modname}_min.sdf
 
 #---------------------------------------------------------
 # Since Synopsys has to insert logic to meet hold      
@@ -150,4 +150,4 @@ report_area > ${details_dir}/area_report_final.rpt
 # later verification.                                  
 #---------------------------------------------------------
 
- write_sdf ${modname}_max.sdf
+ write_sdf ${work_dir}/${modname}_max.sdf
