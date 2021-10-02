@@ -41,9 +41,7 @@ init: clean
 	add synopsys2019;
 
 compile:
-    design_vision -no_gui -x "source setup_read.tcl";
-
-
+	design_vision -no_gui -x "source setup_read.tcl";
 
 .PHONY: clean
 
