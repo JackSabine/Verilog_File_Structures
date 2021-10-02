@@ -39,12 +39,14 @@ export SRC_FILES_RTL
 # Targets for make
 init: clean
 	[ -d $(WORK_DIR) ] || mkdir $(WORK_DIR); \
+	[ -d $(TIMING_DIR) ] || mkdir $(TIMING_DIR); \
+	[ -d $(DETAILS_DIR) ] || mkdir $(DETAILS_DIR); \
 	add synopsys2019;
 
 read:
 	design_vision -no_gui -x "read_verilog $(SRC_FILES_RTL);";
 
-compile: read
+compile:
 	design_vision -no_gui -x "read_verilog $(SRC_FILES_RTL); source Constraints.tcl; source CompileAnalyze.tcl; exit;";
 
 .PHONY: clean
