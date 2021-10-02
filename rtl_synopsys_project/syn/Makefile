@@ -29,9 +29,6 @@ export TOP_NAME		:= arbiter
 export TYPE			:= clock100
 export report_default_significant_digits := 4
 
-
-
-
 # Include rtl files
 include $(BASE)/rtl/rtl_make.mk	
 export SRC_FILES_RTL

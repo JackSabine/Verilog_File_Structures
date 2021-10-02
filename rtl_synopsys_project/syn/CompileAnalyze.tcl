@@ -29,8 +29,8 @@ set details_dir $env(DETAILS_DIR)
 # compile -map_effort medium
 ###########################
 
-# compile_ultra
-compile -map_effort medium
+compile_ultra
+# compile -map_effort medium
 
 #---------------------------------------------------------
 # This is just a sanity check: Write out the design before 
