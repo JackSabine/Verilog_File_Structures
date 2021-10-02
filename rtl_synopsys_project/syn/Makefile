@@ -27,6 +27,7 @@ export CLK_NAME		:= clock
 export CLK_PER		:= 10
 export TOP_NAME		:= arbiter
 export TYPE			:= tut1
+export report_default_significant_digits := 4
 
 
 
@@ -40,8 +41,8 @@ init: clean
 	[ -d $(WORK_DIR) ] || mkdir $(WORK_DIR); \
 	add synopsys2019;
 
-compile:
-	design_vision -no_gui -x "source setup_read.tcl";
+read:
+	design_vision -no_gui -x "read_verilog $(SRC_FILES_RTL)";
 
 .PHONY: clean
 
