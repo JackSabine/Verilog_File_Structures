@@ -46,7 +46,7 @@ compile_ultra
 # tricks that Synopsys can do                          
 #---------------------------------------------------------
 
- report_timing  > ${timing_dir}/timing_max_slow.rpt
+ report_timing  > ${timing_dir}/timing_max_slow_${type}.rpt
 
 #---------------------------------------------------------
 # This is your section to do different things to       
