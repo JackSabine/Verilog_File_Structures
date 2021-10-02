@@ -47,7 +47,7 @@ read:
 	design_vision -no_gui -x "read_verilog $(SRC_FILES_RTL); exit;";
 
 compile:
-	design_vision -no_gui -x "read_verilog $(SRC_FILES_RTL); source Constraints.tcl; source CompileAnalyze.tcl; exit;";
+	design_vision -r $(WORK_DIR) -no_gui -x "read_verilog $(SRC_FILES_RTL); source Constraints.tcl; source CompileAnalyze.tcl; exit;";
 
 .PHONY: clean
 
