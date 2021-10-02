@@ -23,6 +23,11 @@ export TIMING_DIR	:= $(SYNDIR)/timing
 export WORK_DIR		:= $(SYNDIR)/work
 export DETAILS_DIR	:= $(SYNDIR)/details
 
+export CLK_NAME		:= clock
+export CLK_PER		:= 10
+export TOP_NAME		:= arbiter
+export TYPE			:= tut1
+
 
 
 
@@ -30,15 +35,27 @@ export DETAILS_DIR	:= $(SYNDIR)/details
 include $(BASE)/rtl/rtl_make.mk	
 export SRC_FILES_RTL
 
-# # Targets for make
+# Targets for make
 init: clean
-	@[ -d $(WORK_DIR) ] || mkdir $(WORK_DIR); \
-	add synopsys2019; \
-	design_vision;
+	[ -d $(WORK_DIR) ] || mkdir $(WORK_DIR); \
+	add synopsys2019;
+
+compile:
+	design_vision -shell dc_shell -no_gui;
+
 
 .PHONY: clean
 
 clean:
-	@if [ -d "$(WORK_DIR)/__pycache__" ]; then \
-		rm -r $(WORK_DIR)/__pycache__; \
+	@if [ -d "$(WORK_DIR)" ]; then \
+		rm -r $(WORK_DIR); \
+	fi
+
+reset: clean
+	@if [ -d "$(TIMING_DIR)" ]; then \
+		rm -r $(TIMING_DIR); \
+	fi
+
+	@if [ -d "$(DETAILS_DIR)" ]; then \
+		rm -r $(DETAILS_DIR); \
 	fi
