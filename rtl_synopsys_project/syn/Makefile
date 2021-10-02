@@ -26,7 +26,7 @@ export DETAILS_DIR	:= $(SYNDIR)/details
 export CLK_NAME		:= clock
 export CLK_PER		:= 10
 export TOP_NAME		:= arbiter
-export TYPE			:= tut1
+export TYPE			:= clock100
 export report_default_significant_digits := 4
 
 
@@ -45,7 +45,7 @@ read:
 	design_vision -no_gui -x "read_verilog $(SRC_FILES_RTL);";
 
 compile: read
-	design_vision -no_gui -x "haha";
+	design_vision -no_gui -x "read_verilog $(SRC_FILES_RTL); source Constraints.tcl; source CompileAnalyze.tcl; exit;";
 
 .PHONY: clean
 

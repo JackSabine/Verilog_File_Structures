@@ -14,20 +14,29 @@
 ##################################################
 # Revision History: 01/18/2011, by Zhuo Yan
 # replaced with ultra: 08/21/2020, by P. Franzon
+# refactor for use with a makefile, 10/1/2021, by Jack Sabine
 ##################################################
+
+set modname     $env(TOP_NAME)
+set clkname     $env(CLK_NAME)
+set type        $env(TYPE)
+set timing_dir  $env(TIMING_DIR)
+set work_dir    $env(WORK_DIR)
+set details_dir $env(DETAILS_DIR)
 
 ###########################
 # old command - still works, is probably faster but less optimal
 # compile -map_effort medium
 ###########################
 
-compile_ultra
+# compile_ultra
+compile -map_effort medium
 
 #---------------------------------------------------------
 # This is just a sanity check: Write out the design before 
 # hold fixing
 #---------------------------------------------------------
- write -hierarchy -f verilog -o ${modname}_init.v
+ write -hierarchy -f verilog -o ${work_dir}/${modname}_init.v
 
 #---------------------------------------------------------
 # Now trace the critical (slowest) path and see if     
@@ -37,7 +46,7 @@ compile_ultra
 # tricks that Synopsys can do                          
 #---------------------------------------------------------
 
- report_timing  > timing_max_slow.rpt
+ report_timing  > ${timing_dir}/timing_max_slow.rpt
 
 #---------------------------------------------------------
 # This is your section to do different things to       
@@ -77,7 +86,7 @@ compile_ultra
 # is actually met.                                     
 #---------------------------------------------------------
 # report_timing  > timing_max_fast_${type}.rpt
- report_timing -delay min  > timing_min_fast_holdcheck_${type}.rpt
+ report_timing -delay min  > ${timing_dir}/timing_min_fast_holdcheck_${type}.rpt
 
 #---------------------------------------------------------
 # Write out the 'fastest' (minimum) timing file        
@@ -85,7 +94,7 @@ compile_ultra
 # later verification.                                  
 #---------------------------------------------------------
 
- write_sdf counter_min.sdf
+ write_sdf ${modname}_min.sdf
 
 #---------------------------------------------------------
 # Since Synopsys has to insert logic to meet hold      
@@ -100,7 +109,7 @@ compile_ultra
  set link_library   NangateOpenCellLibrary_PDKv1_2_v2008_10_slow_nldm.db
  set link_library   [concat  $link_library dw_foundation.sldb]
  translate
- report_timing  > timing_max_slow_holdfixed_${type}.rpt
+ report_timing  > ${timing_dir}/timing_max_slow_holdfixed_${type}.rpt
 # report_timing -delay min  > timing_min_slow_holdfixed_${type}.rpt
 
 #---------------------------------------------------------
@@ -125,13 +134,14 @@ compile_ultra
 #---------------------------------------------------------
 # Write out area distribution for the final design    
 #---------------------------------------------------------
- report_cell > cell_report_final.rpt
+report_cell > ${details_dir}/cell_report_final.rpt
+report_area > ${details_dir}/area_report_final.rpt
 
 #---------------------------------------------------------
 # Write out the resulting netlist in Verliog format    
 #---------------------------------------------------------
  change_names -rules verilog -hierarchy > fixed_names_init
- write -hierarchy -f verilog -o ${modname}_final.v
+ write -hierarchy -f verilog -o ${work_dir}/${modname}_final.v
 # write -hierarchy -format verilog -output ${modname}_netlist_holdfixed_${type}.v #RAVI
 
 #---------------------------------------------------------
@@ -140,4 +150,4 @@ compile_ultra
 # later verification.                                  
 #---------------------------------------------------------
 
- write_sdf counter_max.sdf
+ write_sdf ${modname}_max.sdf

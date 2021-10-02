@@ -16,7 +16,15 @@
 # Revision History: 01/27/2010, by Chanyoun Won
 #                   01/19/2011, by Won Ha Choi
 #                   01/21/2011, by Zhuo Yan
+#                   10/1/2021, by Jack Sabine
 ##################################################
+
+set modname     $env(TOP_NAME)
+set clkname     $env(CLK_NAME)
+set type        $env(TYPE)
+set timing_dir  $env(TIMING_DIR)
+set work_dir    $env(WORK_DIR)
+set details_dir $env(DETAILS_DIR)
 
  current_design $modname
 
