@@ -48,20 +48,18 @@ incg:
 	design_vision -gui -x "read_verilog $(SRC_FILES_RTL); source Constraints_OneTime.tcl; source CompileAnalyze_OneTime.tcl;"
 
 .PHONY: clean
-.PHONY: superclean
 
 clean:
-	@if [ -d "$(WORK_DIR)" ]; then \
-		rm -r $(WORK_DIR); \
-	fi
-
-superclean: clean
 	@if [ -d "$(OUTPUT_DIR)" ]; then \
 		rm -r $(OUTPUT_DIR); \
 	fi
 
 	@if [ -d "$(SYNDIR)/alib-52" ]; then \
 		rm -r $(SYNDIR)/alib-52; \
+	fi
+	
+	@if [ -d "$(WORK_DIR)" ]; then \
+		rm -r $(WORK_DIR); \
 	fi
 
 	@touch command.log && rm command.log; \
