@@ -20,9 +20,9 @@ export OUTPUT_DIR	:= $(SYNDIR)/output
 export WORK_DIR		:= $(SYNDIR)/work
 
 export CLK_NAME		:= clock
-export CLK_PER		:= 2
+export CLK_PER		:= 10
 export TOP_NAME		:= arbiter
-export TYPE		:= clock500
+export TYPE		:= na
 export report_default_significant_digits := 4
 
 # Include rtl files
