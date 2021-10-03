@@ -1,11 +1,160 @@
-# if { $argc != 2 } {
-#     puts "Need two args"
-# } else {
-#     set CLK_PER = [lindex $argv 1]
-#     puts $CLK_PER
-#     create_clock -name $clkname -period $CLK_PER -waveform "0 [expr $CLK_PER / 2]" $clkname
-# }
+if {[info exists tclk]} {
+    create_clock -name $clkname -period $tclk -waveform "0 [expr $tclk / 2]" $clkname
 
-set CLK_PER = 10
-puts $CLK_PER
-create_clock -name $clkname -period $CLK_PER -waveform "0 [expr $CLK_PER / 2]" $clkname
+    #---------------------------------------------------------
+    # Now resynthesize the design to meet constraints,     
+    # and try to best achieve the goal, and using the      
+    # CMOSX parts.  In large designs, compile can take     
+    # a lllooonnnnggg time!                                
+    #
+    # -map_effort specifies how much optimization effort   
+    # there is, i.e. low, medium, or high.                 
+    #		Use high to squeeze out those last picoseconds. 
+    # -verify_effort specifies how much effort to spend    
+    # making sure that the input and output designs        
+    # are equivalent logically                             
+    #---------------------------------------------------------
+    ##################################################
+    # Revision History: 01/18/2011, by Zhuo Yan
+    # replaced with ultra: 08/21/2020, by P. Franzon
+    # refactor for use with a makefile, 10/1/2021, by Jack Sabine
+    ##################################################
+
+    # These variables should already be defined if the makefile is being used
+    # set modname     $env(TOP_NAME)
+    # set clkname     $env(CLK_NAME)
+    # set type        $env(TYPE)
+    # set output_dir  $env(OUTPUT_DIR)
+    # set work_dir    $env(WORK_DIR)
+
+    ###########################
+    # old command - still works, is probably faster but less optimal
+    # compile -map_effort medium
+    ###########################
+
+    compile -incremental
+    # compile -map_effort medium
+
+    #---------------------------------------------------------
+    # This is just a sanity check: Write out the design before 
+    # hold fixing
+    #---------------------------------------------------------
+    write -hierarchy -f verilog -o ${work_dir}/${modname}_init.v
+
+    #---------------------------------------------------------
+    # Now trace the critical (slowest) path and see if     
+    # the timing works.                                    
+    # If the slack is NOT met, you HAVE A PROBLEM and      
+    # need to redesign or try some other minimization      
+    # tricks that Synopsys can do                          
+    #---------------------------------------------------------
+
+    report_timing  > ${output_dir}/timing_max_slow_${type}.rpt
+
+    #---------------------------------------------------------
+    # This is your section to do different things to       
+    # improve timing or area - RTFM (Read The Manual) :)
+    #---------------------------------------------------------
+
+    #---------------------------------------------------------
+    # Now resynthesize the design for the fastest corner   
+    # making sure that hold time conditions are met        
+    #---------------------------------------------------------
+
+    #---------------------------------------------------------
+    # Specify the fastest process corner and lowest temp   
+    # and highest (fastest) Vcc                            
+    #---------------------------------------------------------
+
+    set target_library NangateOpenCellLibrary_PDKv1_2_v2008_10_fast_nldm.db
+    set link_library   NangateOpenCellLibrary_PDKv1_2_v2008_10_slow_nldm.db
+    set link_library   [concat  $link_library dw_foundation.sldb] 
+    translate
+
+    #---------------------------------------------------------
+    # Set the design rule to 'fix hold time violations'    
+    # Then compile the design again, telling Synopsys to   
+    # only change the design if there are hold time        
+    # violations.                                          
+    #---------------------------------------------------------
+
+    set_fix_hold $clkname
+    compile -only_design_rule -incremental
+     #compile -prioritize_min_paths -only_hold_time
+    # report_timing -delay min -nworst 30 > timing_report_${modname}_min_postfix.rpt 
+    # report_timing -delay min -nworst 30 > timing_report_${modname}_min_postfix.rpt 
+
+    #---------------------------------------------------------
+    # Report the fastest path.  Make sure the hold         
+    # is actually met.                                     
+    #---------------------------------------------------------
+    # report_timing  > timing_max_fast_${type}.rpt
+    report_timing -delay min  > ${output_dir}/timing_min_fast_holdcheck_${type}.rpt
+
+    #---------------------------------------------------------
+    # Write out the 'fastest' (minimum) timing file        
+    # in Standard Delay Format.  We might use this in	    
+    # later verification.                                  
+    #---------------------------------------------------------
+
+    write_sdf ${work_dir}/${modname}_min.sdf
+
+    #---------------------------------------------------------
+    # Since Synopsys has to insert logic to meet hold      
+    # violations, we might find that we have setup         
+    # violations now.  So lets recheck with the slowest    
+    # corner, etc.                                         
+    #  YOU have problems if the slack is NOT MET           
+    # 'translate' means 'translate to new library'         
+    #---------------------------------------------------------
+
+    set target_library NangateOpenCellLibrary_PDKv1_2_v2008_10_slow_nldm.db
+    set link_library   NangateOpenCellLibrary_PDKv1_2_v2008_10_slow_nldm.db
+    set link_library   [concat  $link_library dw_foundation.sldb]
+    translate
+    report_timing  > ${output_dir}/timing_max_slow_holdfixed_${type}.rpt
+    # report_timing -delay min  > timing_min_slow_holdfixed_${type}.rpt
+
+    #---------------------------------------------------------
+    # Sanity checks to see if the libraries are characterized 
+    # correctly    
+    #---------------------------------------------------------
+    # set target_library NangateOpenCellLibrary_PDKv1_2_v2008_10_fast_nldm.db
+    # set link_library   NangateOpenCellLibrary_PDKv1_2_v2008_10_fast_nldm.db
+    # set link_library   [concat  $link_library dw_foundation.sldb]
+    # translate
+    # report_timing  > timing_max_fast_holdfixed_${type}.rpt
+    # report_timing -delay min  > timing_min_fast_holdfixed_${type}.rpt
+
+    # set target_library NangateOpenCellLibrary_PDKv1_2_v2008_10_typical_nldm.db
+    # set link_library   NangateOpenCellLibrary_PDKv1_2_v2008_10_typical_nldm.db
+    # set link_library   [concat  $link_library dw_foundation.sldb]
+    # translate
+    # report_timing  > timing_max_typ_holdfixed_${type}.rpt
+    # report_timing -delay min  > timing_min_typ_holdfixed_${type}.rpt
+
+
+    #---------------------------------------------------------
+    # Write out area distribution for the final design    
+    #---------------------------------------------------------
+    report_cell > ${output_dir}/cell_report_final_${type}.rpt
+    report_area > ${output_dir}/area_report_final_${type}.rpt
+
+    #---------------------------------------------------------
+    # Write out the resulting netlist in Verliog format    
+    #---------------------------------------------------------
+    change_names -rules verilog -hierarchy > fixed_names_init
+    write -hierarchy -f verilog -o ${work_dir}/${modname}_final.v
+    # write -hierarchy -format verilog -output ${modname}_netlist_holdfixed_${type}.v #RAVI
+
+    #---------------------------------------------------------
+    # Write out the 'slowest' (maximum) timing file        
+    # in Standard Delay Format.  We might use this in      
+    # later verification.                                  
+    #---------------------------------------------------------
+
+    write_sdf ${work_dir}/${modname}_max.sdf
+
+} else {
+    puts "Need to specify tclk e.g. `set tclk = 10`"
+}
