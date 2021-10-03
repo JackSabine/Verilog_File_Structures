@@ -22,6 +22,9 @@ set clkname     $env(CLK_NAME)
 set type        $env(TYPE)
 set output_dir  $env(OUTPUT_DIR)
 set work_dir    $env(WORK_DIR)
+set CLK_PER     $env(CLK_PER)
+
+set fileprefix ${modname}_${type}_tclk${CLK_PER}_cnt0
 
 ###########################
 # old command - still works, is probably faster but less optimal
@@ -35,7 +38,7 @@ compile_ultra
 # This is just a sanity check: Write out the design before 
 # hold fixing
 #---------------------------------------------------------
- write -hierarchy -f verilog -o ${work_dir}/${modname}_init.v
+write -hierarchy -f verilog -o ${work_dir}/${fileprefix}_init.v
 
 #---------------------------------------------------------
 # Now trace the critical (slowest) path and see if     
@@ -45,7 +48,7 @@ compile_ultra
 # tricks that Synopsys can do                          
 #---------------------------------------------------------
 
- report_timing  > ${output_dir}/timing_max_slow_${type}.rpt
+report_timing  > ${output_dir}/${fileprefix}_setup_init.rpt
 
 #---------------------------------------------------------
 # This is your section to do different things to       
@@ -62,10 +65,10 @@ compile_ultra
 # and highest (fastest) Vcc                            
 #---------------------------------------------------------
 
- set target_library NangateOpenCellLibrary_PDKv1_2_v2008_10_fast_nldm.db
- set link_library   NangateOpenCellLibrary_PDKv1_2_v2008_10_slow_nldm.db
- set link_library   [concat  $link_library dw_foundation.sldb] 
- translate
+set target_library NangateOpenCellLibrary_PDKv1_2_v2008_10_fast_nldm.db
+set link_library   NangateOpenCellLibrary_PDKv1_2_v2008_10_slow_nldm.db
+set link_library   [concat  $link_library dw_foundation.sldb] 
+translate
 
 #---------------------------------------------------------
 # Set the design rule to 'fix hold time violations'    
@@ -74,8 +77,8 @@ compile_ultra
 # violations.                                          
 #---------------------------------------------------------
 
- set_fix_hold $clkname
- compile -only_design_rule -incremental
+set_fix_hold $clkname
+compile -only_design_rule -incremental
  #compile -prioritize_min_paths -only_hold_time
 # report_timing -delay min -nworst 30 > timing_report_${modname}_min_postfix.rpt 
 # report_timing -delay min -nworst 30 > timing_report_${modname}_min_postfix.rpt 
@@ -85,7 +88,7 @@ compile_ultra
 # is actually met.                                     
 #---------------------------------------------------------
 # report_timing  > timing_max_fast_${type}.rpt
- report_timing -delay min  > ${output_dir}/timing_min_fast_holdcheck_${type}.rpt
+report_timing -delay min  > ${output_dir}/${fileprefix}_hold_check.rpt
 
 #---------------------------------------------------------
 # Write out the 'fastest' (minimum) timing file        
@@ -93,7 +96,7 @@ compile_ultra
 # later verification.                                  
 #---------------------------------------------------------
 
- write_sdf ${work_dir}/${modname}_min.sdf
+write_sdf ${work_dir}/${fileprefix}_min.sdf
 
 #---------------------------------------------------------
 # Since Synopsys has to insert logic to meet hold      
@@ -104,11 +107,11 @@ compile_ultra
 # 'translate' means 'translate to new library'         
 #---------------------------------------------------------
 
- set target_library NangateOpenCellLibrary_PDKv1_2_v2008_10_slow_nldm.db
- set link_library   NangateOpenCellLibrary_PDKv1_2_v2008_10_slow_nldm.db
- set link_library   [concat  $link_library dw_foundation.sldb]
- translate
- report_timing  > ${output_dir}/timing_max_slow_holdfixed_${type}.rpt
+set target_library NangateOpenCellLibrary_PDKv1_2_v2008_10_slow_nldm.db
+set link_library   NangateOpenCellLibrary_PDKv1_2_v2008_10_slow_nldm.db
+set link_library   [concat  $link_library dw_foundation.sldb]
+translate
+report_timing  > ${output_dir}/${fileprefix}_setup_verif.rpt
 # report_timing -delay min  > timing_min_slow_holdfixed_${type}.rpt
 
 #---------------------------------------------------------
@@ -133,14 +136,14 @@ compile_ultra
 #---------------------------------------------------------
 # Write out area distribution for the final design    
 #---------------------------------------------------------
-report_cell > ${output_dir}/cell_report_final_${type}.rpt
-report_area > ${output_dir}/area_report_final_${type}.rpt
+report_cell > ${output_dir}/${fileprefix}_cell_report.rpt
+report_area > ${output_dir}/${fileprefix}_area_report.rpt
 
 #---------------------------------------------------------
 # Write out the resulting netlist in Verliog format    
 #---------------------------------------------------------
- change_names -rules verilog -hierarchy > fixed_names_init
- write -hierarchy -f verilog -o ${work_dir}/${modname}_final.v
+change_names -rules verilog -hierarchy > fixed_names_init
+write -hierarchy -f verilog -o ${work_dir}/${fileprefix}_final.v
 # write -hierarchy -format verilog -output ${modname}_netlist_holdfixed_${type}.v #RAVI
 
 #---------------------------------------------------------
@@ -149,4 +152,4 @@ report_area > ${output_dir}/area_report_final_${type}.rpt
 # later verification.                                  
 #---------------------------------------------------------
 
- write_sdf ${work_dir}/${modname}_max.sdf
+ write_sdf ${work_dir}/${fileprefix}_max.sdf
