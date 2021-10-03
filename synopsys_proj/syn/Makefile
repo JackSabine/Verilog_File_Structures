@@ -35,16 +35,16 @@ init: clean
 	[ -d $(OUTPUT_DIR) ] || mkdir $(OUTPUT_DIR); \
 	add synopsys2019;
 
-read: init
+read:
 	design_vision -no_gui -x "read_verilog $(SRC_FILES_RTL); exit;";
 
-once: init
+once:
 	design_vision -no_gui -x "read_verilog $(SRC_FILES_RTL); source Constraints_OneTime.tcl; source CompileAnalyze_OneTime.tcl; exit;";
 
-incc: init
+incc:
 	design_vision -no_gui -x "read_verilog $(SRC_FILES_RTL); source Constraints_OneTime.tcl; source CompileAnalyze_OneTime.tcl;"
 
-incg: init
+incg:
 	design_vision -gui -x "read_verilog $(SRC_FILES_RTL); source Constraints_OneTime.tcl; source CompileAnalyze_OneTime.tcl;"
 
 .PHONY: clean
@@ -63,3 +63,8 @@ superclean: clean
 	@if [ -d "$(SYNDIR)/alib-52" ]; then \
 		rm -r $(SYNDIR)/alib-52; \
 	fi
+
+	@touch command.log && rm command.log; \
+	touch fixed_names_init && rm fixed_names_init; \
+	touch default.svf && rm default.svf;
+	

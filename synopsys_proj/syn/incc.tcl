@@ -156,5 +156,13 @@ if {[info exists tclk]} {
     write_sdf ${work_dir}/${modname}_max.sdf
 
 } else {
-    puts "Need to specify tclk e.g. `set tclk = 10`"
+    puts "Need to specify tclk e.g. `set tclk 10`"
+
+    if{[info exists incc_count]} {
+        set incc_count [expr $incc_count + 1]
+    } else {
+        set incc_count 0
+    }
+
+    puts $incc_count
 }
