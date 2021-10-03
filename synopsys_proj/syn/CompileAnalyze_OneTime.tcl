@@ -24,7 +24,7 @@ set output_dir  $env(OUTPUT_DIR)
 set work_dir    $env(WORK_DIR)
 set CLK_PER     $env(CLK_PER)
 
-set fileprefix ${modname}_${type}_tclk${CLK_PER}_cnt0
+set fileprefix ${modname}_${type}_cnt0_tclk${CLK_PER}
 
 ###########################
 # old command - still works, is probably faster but less optimal

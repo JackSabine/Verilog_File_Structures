@@ -10,7 +10,7 @@ if {[info exists tclk]} {
     puts "Incremental compile #${incc_count}"
     puts "---------------------------------------------------"
 
-    set fileprefix ${modname}_${type}_tclk${tclk}_cnt${incc_count}
+    set fileprefix ${modname}_${type}_cnt${incc_count}_tclk${tclk}
 
     #---------------------------------------------------------
     # Now resynthesize the design to meet constraints,     
