@@ -1,17 +1,20 @@
-####################################################################################################
-#		Author:	Isaac Hancock
-#		Date:	8/12/2020
-#		Description:
-#		---------------------------------------
-#		Makefile that is in charge of compiling hdl source code and simulation in Modelsim
-#		Should be loacted uner your sim folder.
+#===========================================================================================
 #
-#		Valid Arguments:
-#		> make compile	// compiles rtl and tb
-#		> make clean	// cleans temp directory and modelsim generated files
-#		> make sim_g 	// Simulate modelsim with GUI
-#		> make sim_c 	// Simulates modelsim with command line mode
-#####################################################################################################
+# Author:	Isaac Hancock
+# Date:		8/12/2020
+# Description:
+# ---------------------------------------
+# Makefile that is in charge of compiling HDL source code and simulation in Modelsim
+# Should be loacted uner your sim folder.
+#
+# Valid Arguments:
+# ---------------------------------------
+# > make compile	// compiles rtl and tb
+# > make clean	// cleans temp directory and modelsim generated files
+# > make sim_g 	// Simulate modelsim with GUI
+# > make sim_c 	// Simulates modelsim with command line mode
+#
+#===========================================================================================
 current_dir := $(shell pwd)
 BASE := $(shell cd ../ ; pwd )
 
@@ -39,7 +42,7 @@ VECTOR_FILE := $(BASE)/rtl/memory.list
 
 #Source files that need to be compiled for the tb. RTL make file should reflect this
 SRC_FILES_SIM += \
-	$(BASE)/rtl/proj2.v #$(BASE)/sim/src/project1_tb.v
+	$(BASE)/rtl/proj2.v 
 	
 
 compile: 
