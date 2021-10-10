@@ -26,7 +26,7 @@ export TYPE		:= na
 export report_default_significant_digits := 4
 
 # Include rtl files
-include $(BASE)/rtl/rtl_make.mk	
+include ../rtl/rtl_make.mk	
 export SRC_FILES_RTL
 
 # Targets for make
@@ -50,6 +50,7 @@ incg:
 .PHONY: clean
 
 clean:
+	echo $(BASE)
 	@if [ -d "$(OUTPUT_DIR)" ]; then \
 		rm -r $(OUTPUT_DIR); \
 	fi

@@ -18,7 +18,7 @@ RTLDIR 	:= $(BASE)/rtl
 DOFILE := $(SIMDIR)/temp/setup.do
 
 # Include rtl files
-include ./rtl/rtl_make.mk	
+include ../rtl/rtl_make.mk	
 
 # Include all testbench files in this variable
 TB_FILES 	= \
@@ -30,19 +30,19 @@ TB_NAME := your_tb_modulename_here
 
 # Targets for make
 
-compileall:	clean
+compile:	clean
 	mkdir $(SIMDIR)/temp; vlib $(SIMDIR)/temp/workingDir; vmap work $(SIMDIR)/temp/workingDir; touch $(DOFILE);
-	vlog $(DEPS) $(RTL_FILES) $(TB_FILES);
+	vlog $(SRC_FILES_RTL) $(TB_FILES);
 	
 clean:
-	if [ -d "$(SIMDIR)/temp" ]; then \
+	@if [ -d "$(SIMDIR)/temp" ]; then \
         rm -r $(SIMDIR)/temp; \
 	fi
 
-sim:		compileall
+sim: compile
 	echo "run -all" >> $(DOFILE); vsim -do $(DOFILE) -c $(TB_NAME);
 
-sim_g: 		compileall
+sim_g: compile
 	echo "log -r /*" >> $(DOFILE); echo "onfinish stop" >> $(DOFILE); echo "do wave.do" >> $(DOFILE); vsim $(TB_NAME) -do $(DOFILE) -gui;
 
 # ```write format wave wave.do``` in ModelSim to save current wave configuration

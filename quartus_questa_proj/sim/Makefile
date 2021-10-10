@@ -37,7 +37,7 @@ VECTOR_FILE := $(BASE)/rtl/memory.list
 # folder and have a \ seperated list of absolute paths. Use $(BASE) to 
 # shorten the path as this references your current directory that holds rtl, 
 # syn, and sim folders
-#include ../rtl/rtl_make.mk
+# include ../rtl/rtl_make.mk
 
 
 #Source files that need to be compiled for the tb. RTL make file should reflect this
