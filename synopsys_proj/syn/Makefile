@@ -36,16 +36,16 @@ init: clean
 	add synopsys2019;
 
 read:
-	design_vision -no_gui -x "read_verilog $(SRC_FILES_RTL); exit;";
+	design_vision -no_gui -x "source Read.tcl; exit;";
 
 once:
-	design_vision -no_gui -x "read_verilog $(SRC_FILES_RTL); source Constraints_OneTime.tcl; source CompileAnalyze_OneTime.tcl; exit;";
+	design_vision -no_gui -x "source Read.tcl; source Constraints_OneTime.tcl; source CompileAnalyze_OneTime.tcl; exit;";
 
 incc:
-	design_vision -no_gui -x "read_verilog $(SRC_FILES_RTL); source Constraints_OneTime.tcl; source CompileAnalyze_OneTime.tcl;"
+	design_vision -no_gui -x "source Read.tcl; source Constraints_OneTime.tcl; source CompileAnalyze_OneTime.tcl;"
 
 incg:
-	design_vision -gui -x "read_verilog $(SRC_FILES_RTL); source Constraints_OneTime.tcl; source CompileAnalyze_OneTime.tcl;"
+	design_vision -gui -x "source Read.tcl; source Constraints_OneTime.tcl; source CompileAnalyze_OneTime.tcl;"
 
 .PHONY: clean
 
@@ -66,4 +66,3 @@ clean:
 	@touch command.log && rm command.log; \
 	touch fixed_names_init && rm fixed_names_init; \
 	touch default.svf && rm default.svf;
-	
