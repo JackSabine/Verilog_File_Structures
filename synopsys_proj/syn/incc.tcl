@@ -150,6 +150,7 @@ if {[info exists tclk]} {
     #---------------------------------------------------------
     report_cell > ${output_dir}/${fileprefix}_cell_report.rpt
     report_area > ${output_dir}/${fileprefix}_area_report.rpt
+    report_power > ${output_dir}/${fileprefix}_power_report.rpt
 
     #---------------------------------------------------------
     # Write out the resulting netlist in Verliog format    
